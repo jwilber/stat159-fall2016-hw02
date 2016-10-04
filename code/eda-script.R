@@ -42,16 +42,17 @@ dev.off()
 # Save pdf
 pdf("~/Desktop//stat159/hw2/stat159-fall2016-hw02/images/histogram-sales.pdf",
     width = 8, heigh = 6)
-dev.off()
-
-# TV
-qplot(adv$TV,
+qplot(adv$Sales,
       geom="histogram",
-      binwidth = 8,  
-      main = "Histogram for TV",  
+      binwidth = .75,  
+      main = "Histogram for Sales", 
       fill=I("skyblue1"), 
       col=I("coral"), 
       alpha=I(.8)) + theme_wsj()
+dev.off()
+
+# TV
+
 
 # Save png
 dev.copy(png,"~/Desktop//stat159/hw2/stat159-fall2016-hw02/images/histogram-tv.png",
@@ -60,5 +61,12 @@ dev.off()
 # Save pdf
 pdf("~/Desktop//stat159/hw2/stat159-fall2016-hw02/images/histogram-tv.pdf",
     width = 8, height = 6)
+qplot(adv$TV,
+      geom="histogram",
+      binwidth = 8,  
+      main = "Histogram for TV",  
+      fill=I("skyblue1"), 
+      col=I("coral"), 
+      alpha=I(.8)) + theme_wsj()
 dev.off()
 # ---------------------------------------------
