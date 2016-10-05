@@ -11,7 +11,7 @@ regression.RData: code/regression-script.R  data
 	Rscript $<
 
 eda-output.txt: code/eda-script.R data
-	Rscript $< rm Rplots.pdf  # why is Rplots.pdf being produced?
+	Rscript $<; rm Rplots.pdf  # why is Rplots.pdf being produced?
 
 clean:
 	rm -rf report.pdf
