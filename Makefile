@@ -6,7 +6,7 @@ data:
 	 curl -o data/Advertising.csv http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv
 
 report.pdf: report/report.Rmd regression.RData report
-	pandoc report/report.Rmd --latex-engine=xelatex -o report/report.pdf 
+	pandoc $< --latex-engine=xelatex -o report/$@
 
 regression.RData: code/regression-script.R  data
 	Rscript $<; rm Rplots.pdf 
@@ -15,4 +15,4 @@ eda-output.txt: code/eda-script.R data
 	Rscript $<; rm Rplots.pdf  # why is Rplots.pdf being produced?
 
 clean:
-	rm -rf report.pdf
+	rm -rf report/report.pdf
