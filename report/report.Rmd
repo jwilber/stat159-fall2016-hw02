@@ -1,5 +1,7 @@
 ## Abstract
 
+
+
 The following paper reproduces a simple linear regression model used in _An Introduction to Statistical Learning with Applications in R_ by Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani. The regression model pertains to predicting sales (in the thousands) from TV advertising budget (also in the thousands). It is features in chapter 3.1 of the book.
 
 ## Introduction
@@ -39,14 +41,17 @@ $$ (TV_1, Sales_1), (TV_2, Sales_2),..., (TV_n, Sales_n) $$
 
 Given a relevant training set, our goal is to obtain coefficient estimates for our _Beta_  values such that our linear model fits the data as closely as possible. Put more succintly, we want to find the intercept and slope of our model such that the line resulting from our linear equation is as close as possible to our _n = 200_ points of data. To do this, we'll use the approach of minimizing the least squared error.
 
-How do we do this? It's actually pretty simple: to get our line as close as possible to each dataset, we simply minimize the sum of the distances between our predicted values and the actual values. This process can be achieved by finding the values for our _beta_ terms that minimize the following quantity:
+How do we do this? It's actually pretty simple: to get our line as close as possible to each dataset, we simply minimize the sum of the distances between our predicted values and the actual values. This process can be achieved by finding the values for our terms that minimize the following quantity:
 
 
-$$\sum_{i=1}^n (y_i - \beta_0 - \beta_1x_i)^2 $$
+$$\sum_{i=1}^n (y_i - \beta_0 - \beta_1x_i)^2 $$  
 
-Visually, this process looks as follows:
+Visually, this process looks as follows:  
 
-![ This plot depicts minimizing the least squares criterion in simple linear regression. Each red dot in the plot corresponds to a data point in our training set. The blue line is the predicted output line obtained from our simple linear regression model. The vertical lines between the red dots and the blue line are the errors our prediction makes. These are the very same errors that we are minimizing via least squares (specifically, the it is the squares of these errors that we are minimizing). Thus, the observed blue line in the plot is the line that best minimizies these squared errors: it is the line that fits the closest to the data points in our training set.](https://github.com/jwilber/stat159-fall2016-hw02/blob/master/images/scatterplot-tv-sales.png?raw=true "Least Squares Simple Linear Regression")
+
+
+![ This plot depicts minimizing the least squares criterion in simple linear regression. Each red dot in the plot corresponds to a data point in our training set. The blue line is the predicted output line obtained from our simple linear regression model. The vertical lines between the red dots and the blue line are the errors our prediction makes. These are the very same errors that we are minimizing via least squares (specifically, the it is the squares of these errors that we are minimizing). Thus, the observed blue line in the plot is the line that best minimizies these squared errors: it is the line that fits the closest to the data points in our training set.](images/scatterplot-tv-sales.png "Least Squares Simple Linear Regression")[h]
+
 
 ### Determining a relationship between _X_ and _Y_
 
@@ -59,14 +64,14 @@ $$ H_1: There is some relationship between X and Y $$
 Mathematically, we can construct our tests in the following form:
 
 $$ H_0: \beta_1 = 0 $$
-$$ H_1: \beta1 != 0 $$
+$$ H_1: \beta1 \neq 0 $$
 
 Intuitively, if the value of _beta_1_ is 0, that means changing our value of _X_ will have no effect on our obtained outcome. On the other hand, if that value is not equal to 0, then we know that changing _X_ will result in some change in _Y_, in which case some relationship (no matter the magnitude) does exist.
 
 Because we're performing a simple linear regression and only have two variables, a t-test will suffice to measure the relationship between _X_ and A_Y_.
 We'll construct our t-test in the following manner:
 
-$$ t = \hat{\beta_1} - 0 / SE(\beta_1) $$
+$$ t = \hat{\beta_1} - 0 / SE(\hat{\beta_1}) $$
 
 This test measures the number of standard deviations that our estimate for _beta_1_ is away from 0. We measure this under the null hypothesis, dictating that t will follow a t-distrbition with n-2 degrees of freedom. In this way, we obtain our p-value, the probability of observing what we saw _by chance_, assuming the null hypothesis. P-values reveal information in the following manner:
 
@@ -84,7 +89,7 @@ For a simple linear regression, we'll employ two methods: the RSE and R^2 (R-squ
 
 RSE is the residual standard error. It is an estimate of the standard deviation of the error in our model. Intuitively, it is the average amount that our response will deviate from the true regression line, defined as follows:
 
-$$ sqrt( 1/ (n-2) * \sum_{i=1}^n (y_i - yhat_i)^2) $$
+$$ \sqrt{ 1/ (n-2) * \sum_{i=1}^n (y_i - \hat{y_i})^2} $$
 
 We consider this a measure of the _lack of fit_ of our model.
 
@@ -118,12 +123,7 @@ The plot obtained for our data was already shown. So how did we do?
 
 _Our Coefficient Test_
 
-```{r echo = F}
-suppressMessages(library(xtable))
-reg <- lm(Sales ~ TV, data=adv)
-reg_table <- xtable(reg)
-print(reg_table, type = "latex", file = "reg-table.tex")
-```
+
 
 Thus, for our data, we can see that our coefficient value for __TV__ is 0.0475, In other words, increasing the __TV__ advertising budget by $1,000 is associated with an increase in sales with about 48 units. Because our p-value is so small (< 0.0001), we reject the null hypothesis and conclude that there is indeed some relationship between _X_ and _Y_.
 
@@ -139,12 +139,49 @@ Our measure for R Squared is .61. So 61% of the variability of _sales_ is explai
 Thus, while our simple linear regression model wasn't  perfect, it wasn't horrible. To achieve better predictive accuracy, a more complicated model should be employed. That said, a simple linear regression is a good starting point for any predictive task that assumes some linear structure underpinning the data.
 
 
-Ask Stewart:
-  - How to add est hat
-  - Why plot shows below when I convert
 
 
+```{r echo = F}
+suppressMessages(library(xtable))
+reg <- lm(Sales ~ TV, data=adv)
+reg_table <- xtable(reg)
+print(reg_table, type = "latex", file = "reg-table.tex")
+```
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
+  \hline
+(Intercept) & 7.0326 & 0.4578 & 15.36 & 0.0000 \\ 
+  TV & 0.0475 & 0.0027 & 17.67 & 0.0000 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 
+```{r echo = FALSE}
+suppressMessages((library(xtable)))
+Quantity <- c("Residual Standard Error", "Multiple R-Squared",
+                                      "Adjusted R-Squared")
+Value <- c(3.259, 0.6119, 0.6099)
+scores_df <- data.frame(Quantity, Value)
+score_table <- xtable(scores_df)
+print(score_table, type = "latex")
+```
 
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ Quantity & Value \\ 
+  \hline
+Residual standard error: & 3.259  \\ 
+  Multiple R-squared: &  0.6119 \\
+  Adjusted R-squared: & 0.6099  \\ 
+   \hline
+\end{tabular}
+\end{table}
 
